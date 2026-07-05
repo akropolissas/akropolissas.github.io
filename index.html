@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Convertisseur de Priam</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    max-width: 650px;
+    margin: 60px auto;
+    text-align: center;
+    background: #fafafa;
+}
+
+h1 {
+    font-size: 28px;
+}
+
+input {
+    font-size: 18px;
+    padding: 10px;
+    width: 85%;
+    margin-top: 20px;
+}
+
+.result {
+    margin-top: 30px;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.detail {
+    margin-top: 10px;
+    color: #555;
+}
+
+.badge {
+    margin-top: 20px;
+    font-size: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🧮 Convertisseur de Priam</h1>
+
+<input id="input" placeholder="Ex: 67 cm, 0.5 m, 1200 mm..." />
+
+<div class="result" id="result">Entrez une valeur</div>
+<div class="detail" id="detail"></div>
+<div class="badge" id="badge"></div>
+
+<script>
+
+const PRIAM_CM = 134;
+
+// conversion unités -> cm
+function toCm(value) {
+    value = value.toLowerCase().trim();
+
+    if (value.includes("mm")) return parseFloat(value) / 10;
+    if (value.includes("m")) return parseFloat(value) * 100;
+    if (value.includes("cm")) return parseFloat(value);
+
+    return parseFloat(value);
+}
+
+// fractions + animaux
+function fractionLabel(p) {
+    if (p < 0.08) return ["1/16", "Une mèche de hamster Priam 🐹"];
+    if (p < 0.15) return ["1/8", "Une mèche de Priam 🧶"];
+    if (p < 0.25) return ["1/6", "Un mini hérisson Priam 🦔"];
+    if (p < 0.30) return ["1/4", "Un Raton laveur 🦝"];
+    if (p < 0.40) return ["1/3", "Un chat de Priam 🐱"];
+    if (p < 0.60) return ["1/2", "Un demi-Priam lapin 🐰"];
+    if (p < 0.70) return ["2/3", "Un blaireau Priam 🦡"];
+    if (p < 0.85) return ["3/4", "Un renard Priam 🦊"];
+    if (p < 1.10) return ["1", "Un Priam complet 👑"];
+    if (p < 1.80) return ["1 1/2", "Un Priam et demi 🐘"];
+    if (p < 3) return ["2", "Deux Priam empilés 🐫"];
+    if (p < 5) return ["3+", "Grand troupeau de Priam 🐄"];
+
+    return ["∞", "🔥 GODZILLA PRIAM 🔥"];
+}
+
+document.getElementById("input").addEventListener("input", function() {
+
+    const cm = toCm(this.value);
+
+    if (!cm || isNaN(cm)) {
+        document.getElementById("result").innerText = "Entrée invalide";
+        document.getElementById("detail").innerText = "";
+        document.getElementById("badge").innerText = "";
+        return;
+    }
+
+    const p = cm / PRIAM_CM;
+    const [frac, animal] = fractionLabel(p);
+
+    document.getElementById("result").innerText =
+        frac + " de Priam";
+
+    document.getElementById("detail").innerText =
+        cm.toFixed(1) + " cm = " + p.toFixed(2) + " Priam";
+
+    document.getElementById("badge").innerText =
+        animal;
+
+});
+
+</script>
+
+</body>
+</html>
