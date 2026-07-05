@@ -60,11 +60,18 @@ const PRIAM_CM = 134;
 function toCm(value) {
     value = value.toLowerCase().trim();
 
-    if (value.includes("mm")) return parseFloat(value) / 10;
-    if (value.includes("m")) return parseFloat(value) * 100;
-    if (value.includes("cm")) return parseFloat(value);
+    // garder uniquement chiffres + point + virgule
+    let number = parseFloat(value.replace(",", ".").replace(/[^0-9.]/g, ""));
 
-    return parseFloat(value);
+    if (isNaN(number)) return NaN;
+
+    // priorité aux unités longues d'abord (IMPORTANT)
+    if (value.includes("mm")) return number / 10;
+    if (value.includes("cm")) return number;
+    if (value.includes("m")) return number * 100;
+
+    // défaut = cm
+    return number;
 }
 
 // fractions + animaux
